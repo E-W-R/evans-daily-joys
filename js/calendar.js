@@ -1,7 +1,8 @@
 // The month calendar on the home page. Every column is a weekday, so every column
-// is one game. Days from launch up to today link to their puzzle; later days are
-// shown but locked (unless LOCK_FUTURE_DAYS is off in config.js). Days before launch
-// are greyed out.
+// is one game. Tapping an open day (launch up to today, plus anything opened early)
+// moves the highlight box to it, and the Play button opens the highlighted day.
+// Later days are shown but locked (unless LOCK_FUTURE_DAYS is off in config.js).
+// Days before launch are greyed out.
 
 import { LAUNCH_DATE, LOCK_FUTURE_DAYS, WEEK_START } from "./config.js";
 import {
@@ -18,7 +19,11 @@ function monthNumber(key) {
   return year * 12 + month - 1;
 }
 
-export function createCalendar(root) {
+/**
+ * selected: the day to highlight first, if it's open.
+ * onSelect(key): called with the highlighted day whenever it changes, and once at the start.
+ */
+export function createCalendar(root, { selected: wanted = null, onSelect = () => {} } = {}) {
   const title = root.querySelector("[data-calendar-title]");
   const grid = root.querySelector("[data-calendar-grid]");
   const prev = root.querySelector("[data-calendar-prev]");
@@ -31,7 +36,19 @@ export function createCalendar(root) {
     .join("");
 
   let today = todayKey();
-  let shown = monthNumber(today);
+
+  // A day can be highlighted if it has a game and isn't locked.
+  const isOpen = (key) => {
+    const status = dateStatus(key, today);
+    if (status === "before-launch") return false;
+    if (LOCK_FUTURE_DAYS && status === "future") return false;
+    return gameForDate(key).ready;
+  };
+  // Before launch the first open day is launch day, so start there instead of today.
+  const startingDay = () => (today < LAUNCH_DATE && isOpen(LAUNCH_DATE) ? LAUNCH_DATE : today);
+
+  let selected = wanted && isOpen(wanted) ? wanted : startingDay();
+  let shown = monthNumber(selected);
 
   function render() {
     // Browse from the launch month up to the current month (or on into the future while
@@ -58,8 +75,9 @@ export function createCalendar(root) {
 
   function dayCell(key) {
     const status = dateStatus(key, today);
-    // Today is highlighted even before launch, when it has no puzzle.
-    const classes = key === today ? "day day--today" : "day";
+    let classes = "day";
+    if (key === today) classes += " day--today";
+    if (key === selected) classes += " day--selected";
     const number = `<span class="day__num">${parseKey(key).day}</span>`;
     if (status === "before-launch") return `<li class="${classes} day--locked">${number}</li>`;
 
@@ -76,25 +94,42 @@ export function createCalendar(root) {
     const label = `${formatLong(key)}: ${game.name}${done ? ", finished" : ""}`;
     return `
       <li class="${classes} day--open${done ? " day--done" : ""}">
-        <a href="play.html?date=${key}" aria-label="${escapeHtml(label)}"
-          ${key === today ? 'aria-current="date"' : ""}>
+        <button type="button" data-day="${key}" aria-label="${escapeHtml(label)}"
+          aria-pressed="${key === selected}" ${key === today ? 'aria-current="date"' : ""}>
           ${number}${icon}
           ${done ? `<img class="day__check" src="${CHECK}" alt="">` : ""}
-        </a>
+        </button>
       </li>`;
   }
 
+  function select(key) {
+    if (key === selected) return;
+    selected = key;
+    render();
+    onSelect(selected);
+  }
+
+  grid.addEventListener("click", (event) => {
+    const day = event.target.closest("[data-day]");
+    if (day) select(day.dataset.day);
+  });
   prev.addEventListener("click", () => { shown--; render(); });
   next.addEventListener("click", () => { shown++; render(); });
   render();
+  onSelect(selected);
 
   return {
     /** Re-check the date and saved progress, e.g. when the player comes back to the page. */
     refresh() {
       const now = todayKey();
-      // If the day rolled over while the current month was showing, follow it.
-      if (now !== today && shown === monthNumber(today)) shown = monthNumber(now);
+      // If the day rolled over while the highlight was on today, follow it.
+      const follow = now !== today && selected === startingDay();
       today = now;
+      if (follow || !isOpen(selected)) {
+        selected = startingDay();
+        shown = monthNumber(selected);
+        onSelect(selected);
+      }
       render();
     },
   };

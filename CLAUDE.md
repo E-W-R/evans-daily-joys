@@ -38,7 +38,8 @@ later). README.md covers the file layout, adding games, and deploying.
   clean takes in `assets/weekN/voice/`, which it never touches; it band-limits them to
   300-3000Hz and adds squelch, and needs `lame` for the mp3 (macOS reads mp3 but can't
   write it). Hit testing is pixel-exact and lives in
-  `hitbox.js`; a hitbox PNG's opaque pixels are the hitbox, and it doubles as the
+  `masks.js` (never name a script `hitbox.js`: Safari's privacy blocklist blocks
+  that filename, after an old analytics product, and the game won't load); a hitbox PNG's opaque pixels are the hitbox, and it doubles as the
   artwork's size. The sound effects are Evan's files `assets/buzz.mp3`, `cut.mp3`,
   `boom.mp3` and `defused.mp3`, played by `sfx.js`. Its arena bleeds past the page gutters to the screen
   edges so the bomb can sit wider than the buttons.

@@ -3,7 +3,20 @@ import { LOCK_FUTURE_DAYS } from "./config.js";
 import { clearAll } from "./storage.js";
 import { confirmDialog, showDevBadge, toast } from "./ui.js";
 
-const calendar = createCalendar(document.querySelector("[data-calendar]"));
+// The Play button opens whichever day is highlighted. The highlighted day also goes in
+// this page's address, so coming Back from a game lands on the same day.
+const play = document.querySelector("[data-play]");
+const calendar = createCalendar(document.querySelector("[data-calendar]"), {
+  selected: new URLSearchParams(location.search).get("date"),
+  onSelect(key) {
+    play.href = `play.html?date=${key}`;
+    try {
+      history.replaceState(null, "", `?date=${key}`);
+    } catch {
+      // Some sandboxed previews refuse; the highlight just won't survive a reload.
+    }
+  },
+});
 
 // When the player comes back to this page (back button, switching apps, or the tab
 // left open overnight), refresh today's highlight and the finished check marks.

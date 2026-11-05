@@ -95,7 +95,7 @@ TRIM_HEADROOM = 12  # dB above the room's own hum before it counts as talking.
 
 SPRITE_HEIGHT = 55  # Height of one bomb sprite; --sprite-height for another size.
 FRAME_MS = 1000  # How long each of a bomb's two frames shows.
-CLEAR_ALPHA = 8  # Anything fainter counts as see-through, same as the game's hitbox.js.
+CLEAR_ALPHA = 8  # Anything fainter counts as see-through, same as the game's masks.js.
 
 
 # ---------- Cutting the bomb ----------

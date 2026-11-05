@@ -65,10 +65,16 @@
 
 .day--blank { background: none; }
 
-.day > a {
+.day > button {
   display: block;
+  width: 100%;
   height: 100%;
-  text-decoration: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
   touch-action: manipulation;
 }
 
@@ -96,13 +102,14 @@
 
 .day--locked,
 .day--future { color: var(--ink-soft); }
-.day--locked:not(.day--today) { opacity: 0.4; }
+.day--locked { opacity: 0.4; }
 .day--future .day__icon { opacity: 0.3; filter: grayscale(1); }
 
-.day--open:not(.day--today) > a:active { background: var(--paper); }
+.day--open:not(.day--selected) > button:active { background: var(--paper); }
 
-/* Today: bright square with a pixel border, and its icon bobs. */
-.day--today {
+/* The highlighted day (today, until the player taps another): bright square with a
+   pixel border, and its icon bobs. Play opens this day. */
+.day--selected {
   --px: 3px;
   z-index: 1;
   background: var(--highlight);
@@ -113,10 +120,11 @@
     0 var(--px) 0 var(--ink);
 }
 
+/* Today keeps a bold date wherever the box is. */
 .day--today .day__num { font-weight: 700; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .day--today .day__icon { animation: bob 1s steps(1) infinite; }
+  .day--selected .day__icon { animation: bob 1s steps(1) infinite; }
 }
 
 @keyframes bob {

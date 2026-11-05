@@ -25,7 +25,7 @@
 
 import { pixelArt, INK } from "../../js/icons.js";
 import { escapeHtml, shareText } from "../../js/ui.js";
-import { loadMask, overlaps, screenBox } from "./hitbox.js";
+import { loadMask, overlaps, screenBox } from "./masks.js";
 import { createSfx } from "./sfx.js";
 
 const HEARTS = 3; // Missed pecks allowed per week, however many rounds it has.

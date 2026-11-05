@@ -31,14 +31,25 @@ export function createSfx(folder) {
     }
   }
 
-  // Fetch and decode a sound effect, once. Resolves to null if it's missing or won't
-  // decode, and the answer is remembered, so a missing file is looked for once.
+  // The effects' bytes start downloading as soon as the game loads, so the first peck
+  // doesn't wait on the network. Decoding needs the audio context, which a browser
+  // only allows after a tap, so that waits for effect().
+  const downloads = new Map(
+    SOUNDS.map((name) => [
+      name,
+      fetch(new URL(`${name}.mp3`, folder))
+        .then((response) => (response.ok ? response.arrayBuffer() : null))
+        .catch(() => null),
+    ]),
+  );
+
+  // Decode a sound effect, once. Resolves to null if it's missing or won't decode, and
+  // the answer is remembered, so a missing file is looked for once.
   function effect(name) {
     if (!effects.has(name)) {
       effects.set(
         name,
-        fetch(new URL(`${name}.mp3`, folder))
-          .then((response) => (response.ok ? response.arrayBuffer() : null))
+        (downloads.get(name) ?? Promise.resolve(null))
           .then((bytes) => (bytes && open() ? context.decodeAudioData(bytes) : null))
           .catch(() => null),
       );

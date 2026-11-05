@@ -1,5 +1,8 @@
 // Pixel-exact hit testing for Coot the Wire.
 //
+// Don't rename this file hitbox.js: Safari's privacy blocklist blocks scripts with
+// that name (an old analytics product was called HitBox), and the game won't load.
+//
 // A hitbox is a PNG the same size as the picture it belongs to: an opaque pixel is
 // part of the hitbox, a see-through one isn't. So Bomb-2.png is the bomb-sized
 // picture with only the second wire painted in, and Pidge-2.png is the pigeon-sized
