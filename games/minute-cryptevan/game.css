@@ -316,20 +316,22 @@
     0 2px 0 var(--ink);
 }
 
-/* Once solved there's no keyboard to keep on screen, so the result card may scroll
-   (it can be tall with a video). The margin and padding leave room for its border. */
-.game-minute-cryptevan .mc-bottom.is-done {
-  flex-shrink: 1;
-  min-height: 0;
-}
-
-.game-minute-cryptevan .mc-bottom.is-done .mc-keys {
-  min-height: 0;
+/* Once solved there's no keyboard to keep on screen, so the whole game area scrolls
+   as one page (the result card can be tall with a video) and the clue stops being a
+   scroll box of its own. The margin and padding leave room for the pixel borders. */
+.game-minute-cryptevan.game-root.is-done {
   overflow-y: auto;
   overscroll-behavior: contain;
-  margin: auto -6px -6px;
-  padding: 6px;
+  margin-inline: -6px;
+  padding: 0 6px 6px;
 }
+
+.game-minute-cryptevan.is-done .mc-top {
+  flex: none;
+  overflow: visible;
+}
+
+.game-minute-cryptevan.is-done .mc-bottom { flex: none; }
 
 /* ---------- How-to-play extras ---------- */
 .game-minute-cryptevan .mc-example {

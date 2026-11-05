@@ -127,6 +127,15 @@
 .game-true-colours .tc-palette.is-real { --ring: var(--tc-right); }
 .game-true-colours .tc-palette.is-wrong { --ring: var(--tc-wrong); }
 
+/* The swatches sit in a layer pinned to all four edges of the button. Laid out
+   straight inside the <button>, iPhone Safari left them at their natural height, a
+   thin strip along the top with the rest of the button blank. */
+.game-true-colours .tc-swatches {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+
 .game-true-colours .tc-swatch {
   display: flex;
   flex: 1 1 0;

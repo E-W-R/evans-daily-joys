@@ -355,8 +355,8 @@ function play(root, ctx, puzzle) {
             allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>` : ""}
         <button class="pixel-btn" type="button">Share</button>
       </div>`;
-    // The video makes the card too tall for small screens, so the card scrolls instead.
-    root.querySelector(".mc-bottom").classList.add("is-done");
+    // With no keyboard left to pin, the clue, answer and result scroll as one page.
+    root.classList.add("is-done");
 
     keysArea.querySelector("button").addEventListener("click", () => {
       shareText([

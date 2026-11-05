@@ -127,9 +127,9 @@ export async function mount(root, ctx) {
       const button = document.createElement("button");
       button.type = "button";
       button.style.setProperty("--count", String(palette.length));
-      button.innerHTML = palette.map((colour) => `
+      button.innerHTML = `<span class="tc-swatches">${palette.map((colour) => `
         <span class="tc-swatch is-on-${textOn(colour.hex)}" style="background:${colour.hex}"></span>`)
-        .join("") + `<span class="tc-badge" hidden><img alt=""></span>`;
+        .join("")}</span><span class="tc-badge" hidden><img alt=""></span>`;
       button.addEventListener("click", () => {
         if (guessed(current) || picked === index) return;
         picked = index;
