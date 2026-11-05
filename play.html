@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Evan's Daily Joys</title>
+  <meta name="theme-color" content="#f6ecd6">
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preload" href="assets/fonts/PixelifySans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/AtkinsonHyperlegibleNext-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/play.css">
+  <script type="module" src="js/play.js"></script>
+</head>
+<body>
+  <div class="app play">
+    <header class="topbar">
+      <a class="icon-btn" href="./" data-back aria-label="Back to calendar"><img alt=""></a>
+      <div class="topbar__text">
+        <h1 class="topbar__title" data-game-name></h1>
+        <p class="topbar__meta" data-game-meta></p>
+      </div>
+      <!-- Shown when the game has a how-to-play guide. -->
+      <button class="icon-btn" type="button" data-help aria-label="How to play" hidden><img alt=""></button>
+    </header>
+
+    <!-- The game draws itself in here. -->
+    <main class="game-root" data-game-root></main>
+  </div>
+</body>
+</html>

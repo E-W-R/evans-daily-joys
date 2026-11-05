@@ -1,0 +1,228 @@
+/* Coot the Wire. Everything is scoped to .game-coot-the-wire, which play.html puts on
+   the game area and on the how-to-play box. */
+
+.game-coot-the-wire {
+  --heart: #d9534f;
+  --cut: #49b45c;    /* halo around the bomb when a wire is cut */
+  --missed: #e2564a; /* ... and when the peck missed */
+}
+
+.game-coot-the-wire .ctw {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+/* ---------- Hearts ---------- */
+.game-coot-the-wire .ctw-hud {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+}
+
+.game-coot-the-wire .ctw-hearts {
+  display: flex;
+  gap: 10px;
+}
+
+.game-coot-the-wire .ctw-hearts img {
+  width: 27px; /* 9 pixels at 3× */
+}
+
+/* The heart you just lost gives one last thump on its way out. */
+.game-coot-the-wire .ctw-hearts img.is-lost {
+  animation: ctw-lose-heart 400ms ease-out;
+}
+
+@keyframes ctw-lose-heart {
+  0% { transform: scale(1.4); }
+  60% { transform: scale(0.85); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- The playing field ----------
+   Fills whatever height is left. The bomb sits in the middle of it and stays put, so
+   a hitbox is always in the same place; only the pigeon moves. touch-action keeps a
+   drag from scrolling or zooming the page instead of walking the bird.
+
+   The negative margins cancel the page's gutters exactly, so the field runs to both
+   edges of the screen. That's the room the bomb needs to sit a little wider than the
+   buttons, and it gives the bird more ground to cover. */
+.game-coot-the-wire .ctw-arena {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin-left: calc(-1 * max(var(--gutter), env(safe-area-inset-left)));
+  margin-right: calc(-1 * max(var(--gutter), env(safe-area-inset-right)));
+  overflow: hidden;
+  touch-action: none;
+}
+
+.game-coot-the-wire .ctw-bomb,
+.game-coot-the-wire .ctw-pigeon {
+  position: absolute;
+  pointer-events: none; /* Dragging is handled by the arena underneath. */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.game-coot-the-wire .ctw-bomb__glow,
+.game-coot-the-wire .ctw-bomb__art,
+.game-coot-the-wire .ctw-bomb__flash {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* A halo for the peck you just made: green for a cut, red for a miss. This is the one
+   soft edge on the site. It's a second copy of the bomb sitting directly behind the
+   real one, so only the light spilling past its outline shows. */
+.game-coot-the-wire .ctw-bomb__glow {
+  opacity: 0;
+  filter:
+    drop-shadow(0 0 3px var(--glow))
+    drop-shadow(0 0 7px var(--glow))
+    drop-shadow(0 0 15px var(--glow));
+}
+
+.game-coot-the-wire .ctw-bomb.is-cut { --glow: var(--cut); }
+.game-coot-the-wire .ctw-bomb.is-missed { --glow: var(--missed); }
+
+.game-coot-the-wire .ctw-bomb.is-cut .ctw-bomb__glow,
+.game-coot-the-wire .ctw-bomb.is-missed .ctw-bomb__glow {
+  animation: ctw-glow 720ms ease-out;
+}
+
+@keyframes ctw-glow {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  55% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* The round's hitbox PNG laid over the bomb. brightness(0) paints every solid pixel
+   black without touching the see-through ones, then invert(1) turns them white. */
+.game-coot-the-wire .ctw-bomb__flash {
+  filter: brightness(0) invert(1);
+  opacity: 0;
+}
+
+.game-coot-the-wire .ctw-bomb__flash.is-flashing {
+  animation: ctw-flash 360ms steps(1, end) infinite;
+}
+
+@keyframes ctw-flash {
+  0%, 60% { opacity: 1; }
+  61%, 100% { opacity: 0; }
+}
+
+/* A miss rattles the bomb. A cut doesn't move it at all — just the green halo. */
+.game-coot-the-wire .ctw-bomb.is-near { animation: ctw-rattle 260ms steps(1, end); }
+
+@keyframes ctw-rattle {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(2px, 0); }
+  50%  { transform: translate(-2px, 0); }
+  75%  { transform: translate(2px, 0); }
+  100% { transform: translate(0, 0); }
+}
+
+/* The peck: a quick tip clockwise and back, pivoting on the bird's feet. */
+.game-coot-the-wire .ctw-pigeon {
+  transform-origin: 65% 90%;
+  z-index: 1;
+}
+
+.game-coot-the-wire .ctw-pigeon.is-pecking {
+  animation: ctw-peck 220ms ease-out;
+}
+
+@keyframes ctw-peck {
+  0%   { transform: rotate(0deg); }
+  40%  { transform: rotate(10deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* ---------- What the recording said ----------
+   Floats over the bottom of the arena so the bomb never has to shuffle up. The bomb is
+   laid out above this strip, so a caption never hides a hitbox. layout() works out how
+   tall the strip is and sets --caption-room. */
+.game-coot-the-wire .ctw-caption {
+  position: absolute;
+  right: max(var(--gutter), env(safe-area-inset-right));
+  bottom: 0;
+  left: max(var(--gutter), env(safe-area-inset-left));
+  max-height: var(--caption-room, 104px);
+  overflow-y: auto;
+  padding: 12px 14px;
+  background: var(--paper-light);
+  color: var(--ink);
+  font-family: var(--font-readable);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  box-shadow:
+    0 calc(-1 * var(--px)) 0 var(--ink),
+    calc(-1 * var(--px)) 0 0 var(--ink),
+    var(--px) 0 0 var(--ink),
+    0 var(--px) 0 var(--ink);
+}
+
+/* ---------- Buttons ---------- */
+.game-coot-the-wire .ctw-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ---------- Finished ---------- */
+.game-coot-the-wire .ctw-result {
+  display: grid;
+  gap: 12px;
+  padding: 20px 16px;
+  text-align: center;
+}
+
+.game-coot-the-wire .ctw-result__heading { font-size: 1.75rem; }
+
+.game-coot-the-wire .ctw-result__line {
+  color: var(--ink-soft);
+  font-family: var(--font-readable);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.game-coot-the-wire .ctw-result__wires {
+  font-size: 1.75rem;
+  letter-spacing: 0.15em;
+}
+
+.game-coot-the-wire .ctw-result .pixel-btn { justify-self: center; min-width: 60%; }
+
+/* ---------- No bomb for this week ---------- */
+.game-coot-the-wire .ctw-note {
+  margin-block: auto;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+/* ---------- How to play ---------- */
+.game-coot-the-wire.dialog ul {
+  margin: 0;
+  padding-left: 1.2em;
+  display: grid;
+  gap: 8px;
+}
+
+/* Drop the things that move. The halo stays: it only fades, and it's how you know
+   whether the peck landed. */
+@media (prefers-reduced-motion: reduce) {
+  .game-coot-the-wire .ctw-pigeon.is-pecking,
+  .game-coot-the-wire .ctw-bomb.is-near,
+  .game-coot-the-wire .ctw-hearts img.is-lost {
+    animation: none;
+  }
+}

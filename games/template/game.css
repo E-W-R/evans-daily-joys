@@ -1,0 +1,21 @@
+/* Styles for this game only. Keep every rule under .game-template (rename it to
+   .game-<your-game-id>) so nothing here can affect the rest of the site. */
+
+.game-template .card {
+  display: grid;
+  gap: 24px;
+  margin-block: auto;
+  padding: 24px;
+  text-align: center;
+}
+
+.game-template .prompt {
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+.game-template .note {
+  margin-block: auto;
+  color: var(--ink-soft);
+  text-align: center;
+}

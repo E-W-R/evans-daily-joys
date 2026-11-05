@@ -1,0 +1,16 @@
+.DS_Store
+__pycache__/
+*.pyc
+
+# Downloads the build tools keep between runs: Wikipedia data for
+# build_redacted_titles.py, OpenStreetMap data and geocodes for build_odd_one_out.py
+tools/.cache/
+
+# Date Guessr's photos. The originals never go in the repo: the game only ever
+# ships the encrypted copies in games/date-guessr/locked/, written by
+# tools/build_date_guessr.py.
+games/date-guessr/images/
+
+# Coot the Wire's clean voice takes. The site only plays the processed recN.mp3 that
+# tools/build_coot_the_wire.py writes, so the raw recordings stay on Evan's machine.
+games/coot-the-wire/assets/*/voice/

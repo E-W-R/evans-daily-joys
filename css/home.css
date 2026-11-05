@@ -1,0 +1,148 @@
+/* Home page: title, calendar, Play button. */
+
+.home { gap: 24px; }
+
+/* ---------- Title ---------- */
+.title {
+  padding-top: 8px;
+  color: var(--accent);
+  font-size: clamp(2.75rem, 15vw, 4.5rem);
+  font-weight: 700;
+  line-height: 0.95;
+  text-align: center;
+  text-shadow: var(--px) var(--px) 0 var(--ink);
+}
+
+.title span { display: block; }
+
+/* ---------- Calendar ---------- */
+.calendar {
+  margin-block: auto; /* sits in the middle of the space between title and button */
+  padding: 8px 12px 12px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.calendar__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.calendar__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.calendar__weekdays,
+.calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar__weekdays {
+  margin: 4px 0 6px;
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.calendar__grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------- Day squares ---------- */
+.day {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--paper-dark);
+}
+
+.day--blank { background: none; }
+
+.day > a {
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  touch-action: manipulation;
+}
+
+.day__num {
+  position: absolute;
+  top: 1px;
+  left: 3px;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.day__icon {
+  position: absolute;
+  right: 12%;
+  bottom: 10%;
+  width: 56%;
+}
+
+.day__check {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 16px; /* 8×5 pixels at 2× */
+}
+
+.day--locked,
+.day--future { color: var(--ink-soft); }
+.day--locked:not(.day--today) { opacity: 0.4; }
+.day--future .day__icon { opacity: 0.3; filter: grayscale(1); }
+
+.day--open:not(.day--today) > a:active { background: var(--paper); }
+
+/* Today: bright square with a pixel border, and its icon bobs. */
+.day--today {
+  --px: 3px;
+  z-index: 1;
+  background: var(--highlight);
+  box-shadow:
+    0 calc(-1 * var(--px)) 0 var(--ink),
+    calc(-1 * var(--px)) 0 0 var(--ink),
+    var(--px) 0 0 var(--ink),
+    0 var(--px) 0 var(--ink);
+}
+
+.day--today .day__num { font-weight: 700; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .day--today .day__icon { animation: bob 1s steps(1) infinite; }
+}
+
+@keyframes bob {
+  50% { transform: translateY(-2px); }
+}
+
+/* ---------- Reset button (testing only) ---------- */
+.reset-btn {
+  align-self: center;
+  margin-top: -8px;
+  padding: 4px 8px;
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  font-family: var(--font-pixel);
+  font-size: 0.875rem;
+  text-decoration: underline 2px;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+/* ---------- Play button ---------- */
+.play-btn {
+  width: 100%; /* the column is 90% of the screen, so this is too */
+  min-height: 76px;
+  margin-bottom: var(--px); /* room for the button's pressed-in base */
+  font-size: 2.5rem;
+  letter-spacing: 0.15em;
+}

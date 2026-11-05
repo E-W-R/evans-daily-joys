@@ -1,0 +1,316 @@
+{
+    "week1" : {
+        "url": "https://youtu.be/8WjPH1t-KZc",
+        "clue": "Celebrating nirvanas gone by a year!",
+        "answer": "anniversary",
+        "par": 3,
+        "hints": {
+            "indicator": {
+                "highlight": ["Celebrating", "gone by"],
+                "text": "This clue's indicators are 'Celebrating' and 'gone by'. One of these is an anagram indicator, and the other is a deletion indicator."
+            },
+            "fodder": {
+                "highlight": ["nirvanas", "a", "year"],
+                "text": "This clue's fodder is 'nirvanas', 'a', and 'year'. We'll use all three to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["Celebrating nirvanas gone by a year"],
+                "text": "This clue is an &lit clue, so the definition is the entire clue!"
+            }
+        }
+    },
+    "week2" : {
+        "url": "https://youtu.be/iMmJr3imGVw",
+        "clue": "Tea tester wins assorted desserts",
+        "answer": "sweet treats",
+        "par": 2,
+        "hints": {
+            "indicator": {
+                "highlight": ["assorted"],
+                "text": "This clue's indicator is 'assorted' and it's an anagram indicator."
+            },
+            "fodder": {
+                "highlight": ["Tea tester", "wins"],
+                "text": "This clue's fodder is 'Tea tester' and 'wins'. We'll replace one of these with a substitution and use both to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["desserts"],
+                "text": "Our definition here is 'desserts', and our answer will be another word for that."
+            }
+        }
+    },
+    "week3" : {
+        "url": "https://youtu.be/99UtZo9cbJc",
+        "clue": "After rafting the harmonious sea, Joy knits and Evan colours",
+        "answer": "crafting",
+        "par": 1,
+        "hints": {
+            "indicator": {
+                "highlight": ["After", "harmonious"],
+                "text": "This clue's indicators are 'After' and 'harmonious'. One of these is a positioning indicator, and the other is a homophone indicator."
+            },
+            "fodder": {
+                "highlight": ["rafting", "sea"],
+                "text": "This clue's fodder is 'rafting' and 'sea'. We'll use both to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["Joy knits and Evan colours"],
+                "text": "Our definition here is 'Joy knits and Evan colours', and our answer will be another word for that."
+            }
+        }
+    },
+    "week4" : {
+        "url": "https://youtu.be/vmIDfhTzYdI",
+        "clue": "Check if odd squirrel buried eggcorn outside",
+        "answer": "ensure",
+        "par": 2,
+        "hints": {
+            "indicator": {
+                "highlight": ["odd", "buried", "outside"],
+                "text": "This clue's indicators are 'odd', 'buried', and 'outside'. Two of these are selection indicators, and the other is a positioning indicator."
+            },
+            "fodder": {
+                "highlight": ["squirrel", "eggcorn"],
+                "text": "This clue's fodder is 'squirrel' and 'eggcorn'. We'll use both to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["Check if"],
+                "text": "Our definition here is 'Check if', and our answer will be another word for that."
+            }
+        }
+    },
+    "week5" : {
+        "url": "https://youtu.be/G5rym_F-IP8",
+        "clue": "Sushi lover joyriding with nori?",
+        "answer": "joy ding",
+        "par": 1,
+        "hints": {
+            "indicator": {
+                "highlight": ["with no"],
+                "text": "This clue's indicator is 'with no', and it is a deletion indicator."
+            },
+            "fodder": {
+                "highlight": ["joyriding", "ri"],
+                "text": "This clue's fodder is 'joyriding' and 'ri'. We'll use both to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["Sushi lover"],
+                "text": "Our definition here is 'Sushi lover', and our answer will be an example of one."
+            }
+        }
+    },
+    "week6" : {
+        "url": "https://youtu.be/IYvyhFjO1lA",
+        "clue": "Hulu captures loon flying to first date",
+        "answer": "honolulu",
+        "par": 2,
+        "hints": {
+            "indicator": {
+                "highlight": ["captures", "flying"],
+                "text": "This clue's indicators are 'captures' and 'flying'. One of these is an anagram indicator and the other is a containment indicator."
+            },
+            "fodder": {
+                "highlight": ["Hulu", "loon"],
+                "text": "This clue's fodder is 'Hulu' and 'loon'. We'll use both to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["first date"],
+                "text": "Our definition here is 'first date', and our answer will be where we went for ours :)"
+            }
+        }
+    },
+    "week7" : {
+        "url": "https://youtu.be/RQNY5DXTkGI",
+        "clue": "Cycling quarrels! Looks like tent was replaced by a pole, let's hide",
+        "answer": "squirrel",
+        "par": 3,
+        "hints": {
+            "indicator": {
+                "highlight": ["Cycling", "Looks like", "replaced by"],
+                "text": "This clue's indicators are 'Cycling', 'Looks like', and 'replaced by. One of these is a homoglyph indicator, another is a rotation indicator, and the last is a replacement indicator."
+            },
+            "fodder": {
+                "highlight": ["quarrels", "tent", "pole"],
+                "text": "This clue's fodder is 'quarrels', 'tent', and 'pole'. We'll use all three to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["let's hide"],
+                "text": "Our definition here is 'let's hide', and our answer will be another word for that."
+            }
+        }
+    },
+    "week8" : {
+        "url": "https://youtu.be/ZDNpEBGFT70",
+        "clue": "Rare bird advocate forgets date ended with 'Eastern Time'?",
+        "answer": "avocet",
+        "par": 2,
+        "hints": {
+            "indicator": {
+                "highlight": ["forgets", "ended with"],
+                "text": "This clue's indicators are 'forgets' and 'ended with'. One of these is a positioning indicator and the other is a deletion indicator."
+            },
+            "fodder": {
+                "highlight": ["advocate", "date", "Eastern Time"],
+                "text": "This clue's fodder is 'advocate', 'date', and 'Eastern Time'. We'll replace one with a substitution and use all three to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["Rare bird"],
+                "text": "Our definition here is 'Rare bird', and our answer will be one we've seen!"
+            }
+        }
+    },
+    "week9" : {
+        "url": "https://youtu.be/DNtmpNXSy_I",
+        "clue": "On the margins of gentrification, lead researcher finds city bird",
+        "answer": "pigeon",
+        "par": 2,
+        "hints": {
+            "indicator": {
+                "highlight": ["On the margins of", "lead"],
+                "text": "This clue's indicators are 'On the margins of' and 'lead'. One of these is a positioning indicator and the other is a selection indicator."
+            },
+            "fodder": {
+                "highlight": ["gentrification", "researcher"],
+                "text": "This clue's fodder is 'gentrification' and 'researcher'. We'll replace one with a substitution and use both to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["City bird"],
+                "text": "Our definition here is 'City bird', and our answer will be an example of one."
+            }
+        }
+    },
+    "week10" : {
+        "url": "https://youtu.be/ovS_cnrGUcU",
+        "clue": "No performers clock in at the lock in factor(y) assembly",
+        "answer": "flock",
+        "par": 3,
+        "hints": {
+            "indicator": {
+                "highlight": ["No", "clock in", "in"],
+                "text": "This clue's indicators are 'No ___ clock in' and 'in'. One of these is a containment indicator and the other is a deletion indicator."
+            },
+            "fodder": {
+                "highlight": ["performers", "lock", "factory"],
+                "text": "This clue's fodder is 'performers', 'lock', and 'factor'. We'll replace one with a substitution and use all three to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["assembly"],
+                "text": "Our definition here is 'assembly', and our answer will be another word for that."
+            }
+        }
+    },
+    "week11" : {
+        "clue": "\"Young jay starts doing gymnastics\", per birdwatcher",
+        "answer": "joy ding",
+        "par": 2,
+        "hints": {
+            "indicator": {
+                "highlight": ["starts", "gymnastics"],
+                "text": "This clue's indicators are 'starts' and 'gymnastics'. One of these is a selection indicator and the other is an anagram indicator."
+            },
+            "fodder": {
+                "highlight": ["Young jay", "doing"],
+                "text": "This clue's fodder is 'Young jay' and 'doing'. We'll use both to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["birdwatcher"],
+                "text": "Our definition here is 'birdwatcher', and our answer will be my favourite one."
+            }
+        }
+    },
+    "week12" : {
+        "clue": "Lovebirds dancing enjoy advantages offstage",
+        "answer": "evan and joy",
+        "par": 2,
+        "hints": {
+            "indicator": {
+                "highlight": ["dancing", "offstage"],
+                "text": "This clue's indicators are 'dancing' and 'offstage'. One of these is an anagram indicator and the other is a specific kind of deletion indicator."
+            },
+            "fodder": {
+                "highlight": ["enjoy", "advantages"],
+                "text": "This clue's fodder is 'enjoy' and 'advantages'. We'll use both to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["Lovebirds"],
+                "text": "Our definition here is 'Lovebirds', and our answer will be an example of two."
+            }
+        }
+    },
+    "week13" : {
+        "clue": "Evan and Joy disagree on cooking french fries",
+        "answer": "strife",
+        "par": 2,
+        "hints": {
+            "indicator": {
+                "highlight": ["cooking", "french"],
+                "text": "This clue's indicators are 'cooking' and 'french'. One of these is an anagram indicator and the other is a translation indicator."
+            },
+            "fodder": {
+                "highlight": ["fries"],
+                "text": "This clue's fodder is 'fries'. We'll use this to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["Evan and Joy disagree"],
+                "text": "Our definition here is 'Evan and Joy disagree', and our answer will be another word for disagreement."
+            }
+        }
+    },
+    "week14" : {
+        "clue": "\"Troublesome beginnings of a nuanced negotiation\", Joy Ding - J.D.",
+        "answer": "annoying",
+        "par": 1,
+        "hints": {
+            "indicator": {
+                "highlight": ["beginnings of", "-"],
+                "text": "This clue's indicators are 'beginnings of' and '-'. One of these is a selection indicator and the other is a deletion indicator."
+            },
+            "fodder": {
+                "highlight": ["a nuanced negotiation", "Joy Ding", "J.D."],
+                "text": "This clue's fodder is 'a nuanced negotiation', 'Joy Ding', and 'J.D.'. We'll use these to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["Troublesome"],
+                "text": "Our definition here is 'Troublesome', and our answer will be another word for disagreement."
+            }
+        }
+    },
+    "week15" : {
+        "clue": "Forever down to leave & play Stardew Valley periodically",
+        "answer": "always",
+        "par": 2,
+        "hints": {
+            "indicator": {
+                "highlight": ["to leave", "play", "periodically"],
+                "text": "This clue's indicators are 'to leave', 'play', and 'periodically'. One of these is a selection indicator, another is a deletion indicator, and the last is an anagram indicator."
+            },
+            "fodder": {
+                "highlight": ["down", "Stardew Valley"],
+                "text": "This clue's fodder is 'down' and 'Stardew Valley'. We'll replace one of these with a short substitution and use both to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["Forever"],
+                "text": "Our definition here is 'Forever', and our answer will be another word for disagreement."
+            }
+        }
+    },
+    "week16" : {
+        "clue": "Love was lost in wild year of the horse. Or was it a pegasus? What's the difference?",
+        "answer": "feathery",
+        "par": 4,
+        "hints": {
+            "indicator": {
+                "highlight": ["was lost in", "wild"],
+                "text": "This clue's indicators are 'was lost in' and 'wild'. One of these is an anagram indicator and the other is a deletion indicator."
+            },
+            "fodder": {
+                "highlight": ["Love", "year of the"],
+                "text": "This clue's fodder is 'Love' and 'year of the'. We'll replace one of these with a short substitution and use both to construct our answer, as guided by the clue's indicator(s)."
+            },
+            "definition": {
+                "highlight": ["horse. Or was it a pegasus? What's the difference?"],
+                "text": "Our definition here is 'horse. Or was it a pegasus? What's the difference?'. Our answer will be a cheeky response to this definition's question."
+            }
+        }
+    }
+}

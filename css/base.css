@@ -1,0 +1,277 @@
+/* Shared styles for every page: design tokens, reset, and the pixel UI pieces. */
+
+/* ---------- Design tokens: change the look of the whole site here ---------- */
+:root {
+  --paper: #f6ecd6;        /* page background */
+  --paper-light: #fff8e7;  /* boxes and buttons */
+  --paper-dark: #ecdcbc;   /* calendar squares */
+  --ink: #2b2118;          /* text and outlines */
+  --ink-soft: #8a7a66;     /* secondary text, locked days */
+  --accent: #e4572e;       /* title, Play button */
+  --highlight: #f2a541;    /* today */
+
+  --font-pixel: "Pixelify Sans", ui-monospace, monospace;
+  /* For letters that have to be read at a glance: clues, answers, keyboard keys. */
+  --font-readable: "Atkinson Hyperlegible Next", system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif;
+
+  /* One chunky "pixel". Pixel borders and shadows are multiples of it. */
+  --px: 4px;
+
+  /* The site is laid out as a phone-width column. On a phone that's the whole
+     screen; on a computer it's centered and capped at --app-max. */
+  --app-max: 480px;
+  --gutter: calc(min(100vw, var(--app-max)) * 0.05); /* content is 90% of the width */
+}
+
+@font-face {
+  font-family: "Pixelify Sans";
+  src: url("../assets/fonts/PixelifySans-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  src: url("../assets/fonts/AtkinsonHyperlegibleNext-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-pixel);
+  font-size: 1rem;
+  line-height: 1.3;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img { display: block; max-width: 100%; image-rendering: pixelated; }
+button { font: inherit; color: inherit; }
+a { color: inherit; }
+h1, h2, h3, p { margin: 0; }
+[hidden] { display: none !important; }
+
+:focus-visible { outline: 3px dashed var(--ink); outline-offset: 3px; }
+
+/* Read by screen readers, invisible on screen. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- App column ---------- */
+.app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--app-max);
+  min-height: 100vh;
+  min-height: 100dvh; /* excludes the phone browser's address bar */
+  margin: 0 auto;
+  /* env(safe-area-inset-*) keeps clear of the notch and the home bar. */
+  padding:
+    max(16px, env(safe-area-inset-top))
+    max(var(--gutter), env(safe-area-inset-right))
+    max(20px, env(safe-area-inset-bottom))
+    max(var(--gutter), env(safe-area-inset-left));
+}
+
+/* ---------- Pixel box: a panel with a chunky border and notched corners ---------- */
+/* The border is four hard shadows, one per side. Leaving the corners empty gives
+   the stepped, pixel-art look. They sit outside the box, so leave --px of room. */
+.pixel-box {
+  background: var(--paper-light);
+  box-shadow:
+    0 calc(-1 * var(--px)) 0 var(--ink),
+    calc(-1 * var(--px)) 0 0 var(--ink),
+    var(--px) 0 0 var(--ink),
+    0 var(--px) 0 var(--ink);
+}
+
+/* ---------- Pixel button: same border, plus a thicker bottom it presses into ---------- */
+.pixel-btn {
+  --face: var(--accent);
+  --lift: var(--px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 8px 24px;
+  border: 0;
+  background: var(--face);
+  color: var(--paper-light);
+  font-family: var(--font-pixel);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  box-shadow:
+    0 calc(-1 * var(--px)) 0 var(--ink),
+    calc(-1 * var(--px)) 0 0 var(--ink),
+    var(--px) 0 0 var(--ink),
+    0 calc(var(--px) + var(--lift)) 0 var(--ink),
+    inset 0 calc(-1 * var(--px)) 0 rgb(0 0 0 / 0.18);
+}
+
+.pixel-btn:active:not(:disabled) {
+  --lift: 0px;
+  transform: translateY(var(--px));
+}
+
+.pixel-btn:disabled {
+  --face: var(--ink-soft);
+  cursor: default;
+}
+
+/* A quieter button for the less important choice, like Cancel. */
+.pixel-btn--plain {
+  --face: var(--paper-light);
+  color: var(--ink);
+}
+
+@media (hover: hover) {
+  .pixel-btn:hover:not(:disabled) { filter: brightness(1.06); }
+}
+
+/* ---------- Icon button: a bare 44px tap target around a pixel-art image ---------- */
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.icon-btn img { width: auto; height: 21px; } /* 7-pixel-tall icons at 3× */
+.icon-btn:disabled { opacity: 0.2; cursor: default; }
+
+/* ---------- On-screen keyboard (js/keyboard.js) ---------- */
+.keyboard {
+  display: grid;
+  gap: 8px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.keyboard__row {
+  display: flex;
+  gap: 6px;
+}
+
+.keyboard__row:nth-child(2) { padding-inline: 5%; } /* half a key on each side */
+
+.key {
+  --px: 2px;
+  --face: var(--paper-light);
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 46px;
+  padding: 0;
+  color: var(--ink);
+  font-family: var(--font-readable);
+  font-size: 1.25rem;
+  letter-spacing: 0;
+}
+
+.key--wide { flex-grow: 1.5; }
+.key--spacer { visibility: hidden; }
+.key img { width: 27px; } /* 9×7 pixels at 3× */
+
+/* ---------- Dialog (the how-to-play guide) ---------- */
+.dialog {
+  width: min(90vw, 432px);
+  max-height: 85dvh;
+  padding: 0;
+  border: 0;
+  color: var(--ink);
+  font-family: var(--font-pixel);
+}
+
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog:focus-visible { outline: none; }
+.dialog::backdrop { background: rgb(43 33 24 / 0.55); }
+
+.dialog__body {
+  display: grid;
+  gap: 12px;
+  padding: 24px 24px 8px;
+  overflow-y: auto;
+  line-height: 1.4;
+}
+
+.dialog__body h2 { font-size: 1.75rem; line-height: 1.1; }
+.dialog__body h3 { margin-top: 8px; font-size: 1.25rem; }
+.dialog__body ul { display: grid; gap: 8px; margin: 0; padding-left: 20px; }
+
+.dialog__actions { padding: 16px 24px 28px; }
+.dialog__actions .pixel-btn { width: 100%; }
+
+.dialog__actions--pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ---------- Toast (see toast() in js/ui.js) ---------- */
+.toast {
+  position: fixed;
+  top: max(72px, calc(env(safe-area-inset-top) + 56px));
+  left: 50%;
+  z-index: 20;
+  padding: 8px 16px;
+  background: var(--ink);
+  color: var(--paper-light);
+  white-space: nowrap;
+  pointer-events: none;
+  visibility: hidden;
+  transform: translateX(-50%);
+}
+
+.toast--show { animation: toast 1.8s steps(1) forwards; }
+
+@keyframes toast {
+  0%, 100% { visibility: hidden; }
+  3%, 90% { visibility: visible; }
+}
+
+/* ---------- Test-date badge (see ?today= in js/dates.js) ---------- */
+.dev-badge {
+  position: fixed;
+  top: max(4px, env(safe-area-inset-top));
+  right: 4px;
+  z-index: 10;
+  padding: 2px 6px;
+  background: var(--ink);
+  color: var(--paper-light);
+  font-size: 0.75rem;
+  text-decoration: none;
+}

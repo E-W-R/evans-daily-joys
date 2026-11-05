@@ -1,0 +1,341 @@
+/* Minute CryptEvan. Every rule is scoped under .game-minute-cryptevan, the class on the
+   game area and on its how-to-play dialog. */
+
+.game-minute-cryptevan {
+  /* Hint colors: solid for buttons and circles, tint for highlights in the clue. */
+  --definition: #3a9e8f;
+  --indicator: #8e5ba8;
+  --indicator-tint: #e4d2ee;
+  --fodder: #f2a541;
+  --fodder-tint: #fbdcaa;
+  --letter: #4f86c6;
+  --letter-tint: #cfe0f4;
+  --solved: #7fa34a;
+}
+
+.game-minute-cryptevan.game-root { gap: 14px; }
+
+/* ---------- Layout ---------- */
+/* The clue and hint buttons scroll when they don't fit; the answer, circles and
+   keyboard below always stay on screen. */
+.game-minute-cryptevan .mc-top {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* Room for the pixel borders and button bases, which scrolling would clip. */
+  margin: -6px -6px 0;
+  padding: 6px 6px 10px;
+}
+
+.game-minute-cryptevan .mc-bottom {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  gap: 14px;
+}
+
+/* Spare space on tall screens goes above the keyboard, so the answer stays by the clue. */
+.game-minute-cryptevan .mc-keys { margin-top: auto; }
+
+/* ---------- Highlights (clue and how-to-play) ---------- */
+.game-minute-cryptevan mark {
+  background: none;
+  color: inherit;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.game-minute-cryptevan .hl-definition {
+  text-decoration: underline 4px var(--definition);
+  text-decoration-skip-ink: none;
+  text-underline-offset: 5px;
+}
+
+.game-minute-cryptevan .hl-indicator { background: var(--indicator-tint); }
+.game-minute-cryptevan .hl-fodder { background: var(--fodder-tint); }
+
+/* ---------- Clue card ---------- */
+.game-minute-cryptevan .mc-clue { padding: 16px 16px 18px; }
+
+.game-minute-cryptevan .mc-clue__text {
+  font-family: var(--font-readable);
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.game-minute-cryptevan .mc-enum {
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.game-minute-cryptevan .mc-clue__hint {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 2px dashed var(--paper-dark);
+}
+
+.game-minute-cryptevan .mc-clue__hint-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  justify-self: stretch;
+}
+
+/* A full 44px tap target that doesn't make the row any taller. */
+.game-minute-cryptevan .mc-close { margin: -12px -12px -12px 0; }
+.game-minute-cryptevan .mc-close img { height: 14px; } /* 7×7 pixels at 2× */
+
+.game-minute-cryptevan .mc-chip {
+  padding: 2px 8px;
+  background: var(--chip);
+  color: var(--paper-light);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.game-minute-cryptevan .mc-chip[data-type="definition"] { --chip: var(--definition); }
+.game-minute-cryptevan .mc-chip[data-type="indicator"] { --chip: var(--indicator); }
+.game-minute-cryptevan .mc-chip[data-type="fodder"] { --chip: var(--fodder); color: var(--ink); }
+
+.game-minute-cryptevan .mc-clue__hint-text { line-height: 1.4; }
+
+/* ---------- Answer boxes ---------- */
+.game-minute-cryptevan .mc-answer {
+  container-type: inline-size; /* lets the boxes size themselves from its width (cqw) */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 16px;
+  padding: 2px;
+}
+
+.game-minute-cryptevan .mc-word {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.game-minute-cryptevan .mc-cell {
+  /* As big as fits on one line (up to 42px), but never under 20px: longer answers wrap
+     onto a second line between words instead. (The 1px is slack for rounding.) */
+  --box: clamp(
+    20px,
+    calc(
+      (100cqw - 1px
+        - (var(--words) - 1) * 16px
+        - (var(--letters) - var(--words)) * 6px
+        - var(--hyphens) * 16px)
+      / var(--letters)
+    ),
+    42px
+  );
+  display: grid;
+  place-items: center;
+  width: var(--box);
+  height: var(--box);
+  padding: 0;
+  border: 0;
+  background: var(--paper-light);
+  color: var(--ink);
+  font-family: var(--font-readable);
+  font-size: calc(var(--box) * 0.62);
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+  box-shadow:
+    0 -2px 0 var(--ink),
+    -2px 0 0 var(--ink),
+    2px 0 0 var(--ink),
+    0 2px 0 var(--ink);
+}
+
+.game-minute-cryptevan .mc-cell.is-cursor { background: var(--highlight); }
+
+.game-minute-cryptevan .mc-cell.is-revealed {
+  background: var(--letter-tint);
+  color: var(--letter);
+  cursor: default;
+}
+
+.game-minute-cryptevan .mc-answer.is-solved .mc-cell {
+  background: var(--solved);
+  color: var(--paper-light);
+  cursor: default;
+}
+
+.game-minute-cryptevan .mc-hyphen {
+  width: 10px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* Wrong answer: a quick, jerky shake. */
+.game-minute-cryptevan .mc-answer.is-wrong { animation: mc-shake 0.45s steps(1); }
+
+@keyframes mc-shake {
+  0%, 100% { transform: none; }
+  12% { transform: translateX(-6px); }
+  25% { transform: translateX(6px); }
+  37% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  62% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+/* Right answer: the letters hop one after another. */
+.game-minute-cryptevan .mc-answer.just-solved .mc-cell {
+  animation: mc-hop 0.4s steps(2) calc(var(--i) * 70ms) both;
+}
+
+@keyframes mc-hop {
+  50% { transform: translateY(-8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-minute-cryptevan .mc-answer.is-wrong { animation: none; }
+  .game-minute-cryptevan .mc-answer.is-wrong .mc-cell { background: #f5c4b6; }
+  .game-minute-cryptevan .mc-answer.just-solved .mc-cell { animation: none; }
+}
+
+/* ---------- Hint circles ---------- */
+.game-minute-cryptevan .mc-circles {
+  container-type: inline-size;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  min-height: 36px;
+}
+
+.game-minute-cryptevan .mc-circle-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+/* A 7×7 pixel ring: ink outside, --fill inside. */
+.game-minute-cryptevan .mc-circle {
+  --size: clamp(10px, calc((100cqw - (var(--circles) - 1) * 4px) / var(--circles)), 21px);
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  background: var(--ink);
+  clip-path: polygon(
+    28.57% 0, 71.43% 0, 71.43% 14.29%, 85.71% 14.29%, 85.71% 28.57%, 100% 28.57%,
+    100% 71.43%, 85.71% 71.43%, 85.71% 85.71%, 71.43% 85.71%, 71.43% 100%, 28.57% 100%,
+    28.57% 85.71%, 14.29% 85.71%, 14.29% 71.43%, 0 71.43%, 0 28.57%, 14.29% 28.57%,
+    14.29% 14.29%, 28.57% 14.29%
+  );
+}
+
+.game-minute-cryptevan .mc-circle::after {
+  content: "";
+  position: absolute;
+  inset: 14.29%;
+  background: var(--fill, var(--paper-light));
+  clip-path: polygon(
+    20% 0, 80% 0, 80% 20%, 100% 20%, 100% 80%, 80% 80%,
+    80% 100%, 20% 100%, 20% 80%, 0 80%, 0 20%, 20% 20%
+  );
+}
+
+.game-minute-cryptevan .mc-circle[data-type="definition"] { --fill: var(--definition); }
+.game-minute-cryptevan .mc-circle[data-type="indicator"] { --fill: var(--indicator); }
+.game-minute-cryptevan .mc-circle[data-type="fodder"] { --fill: var(--fodder); }
+.game-minute-cryptevan .mc-circle[data-type="letter"] { --fill: var(--letter); }
+
+.game-minute-cryptevan .mc-par {
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+/* ---------- Hint buttons ---------- */
+.game-minute-cryptevan .mc-hints {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 14px;
+}
+
+.game-minute-cryptevan .mc-hint {
+  --px: 3px;
+  min-height: 44px;
+  padding: 4px 8px;
+  font-size: 1rem;
+}
+
+.game-minute-cryptevan .mc-hint[data-hint="definition"] { --face: var(--definition); }
+.game-minute-cryptevan .mc-hint[data-hint="indicator"] { --face: var(--indicator); }
+.game-minute-cryptevan .mc-hint[data-hint="fodder"] { --face: var(--fodder); color: var(--ink); }
+.game-minute-cryptevan .mc-hint[data-hint="letter"] { --face: var(--letter); }
+.game-minute-cryptevan .mc-hint[data-hint="letter"]:disabled { --face: var(--ink-soft); }
+
+/* An opened hint stays pressed in. Tapping it again shows its explanation for free. */
+.game-minute-cryptevan .mc-hint.is-open {
+  --lift: 0px;
+  transform: translateY(var(--px));
+}
+
+/* ---------- Result (replaces the keyboard) ---------- */
+.game-minute-cryptevan .mc-result {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 20px 20px 24px;
+  text-align: center;
+}
+
+.game-minute-cryptevan .mc-result__heading { font-size: 2rem; line-height: 1; }
+.game-minute-cryptevan .mc-result__score { font-size: 1.25rem; }
+.game-minute-cryptevan .mc-result__next { color: var(--ink-soft); }
+.game-minute-cryptevan .mc-result .pixel-btn { width: 100%; margin-top: 6px; }
+
+.game-minute-cryptevan .mc-result__video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin-top: 6px;
+  border: 0;
+  background: var(--ink);
+  box-shadow:
+    0 -2px 0 var(--ink),
+    -2px 0 0 var(--ink),
+    2px 0 0 var(--ink),
+    0 2px 0 var(--ink);
+}
+
+/* Once solved there's no keyboard to keep on screen, so the result card may scroll
+   (it can be tall with a video). The margin and padding leave room for its border. */
+.game-minute-cryptevan .mc-bottom.is-done {
+  flex-shrink: 1;
+  min-height: 0;
+}
+
+.game-minute-cryptevan .mc-bottom.is-done .mc-keys {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: auto -6px -6px;
+  padding: 6px;
+}
+
+/* ---------- How-to-play extras ---------- */
+.game-minute-cryptevan .mc-example {
+  padding: 12px;
+  background: var(--paper);
+  font-family: var(--font-readable);
+  font-size: 1.25rem;
+  text-align: center;
+}

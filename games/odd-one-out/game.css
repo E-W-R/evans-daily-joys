@@ -1,0 +1,280 @@
+/* Odd One Out. Everything is scoped to .game-odd-one-out, which play.html puts on
+   the game area and on the how-to-play box. */
+
+.game-odd-one-out {
+  /* The map's four colours, and its streets from highway down to side street.
+     map.js reads these, so the whole map restyles from here. */
+  --ooo-water: #a6c4d4;
+  --ooo-land: #fbf1dc;
+  --ooo-road-1: #c0a373;
+  --ooo-road-2: #cfb68d;
+  --ooo-road-3: #dcc8a5;
+  --ooo-road-4: #e6d7bb;
+
+  --ooo-right: #7fa34a; /* the made-up branch, once it's found */
+  --ooo-wrong: #b6a892; /* a real branch, ruled out */
+}
+
+.game-odd-one-out .ooo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+
+.game-odd-one-out .ooo-note {
+  margin: auto;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+/* ---------- Which chain, and how far in ---------- */
+.game-odd-one-out .ooo-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.game-odd-one-out .ooo-chain {
+  margin: 0;
+  font-size: 1.375rem;
+  line-height: 1.1;
+}
+
+.game-odd-one-out .ooo-pips {
+  display: flex;
+  flex: none;
+  gap: 6px;
+}
+
+.game-odd-one-out .ooo-pip {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--ink);
+  background: var(--paper-dark);
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+  line-height: 18px;
+  text-align: center;
+}
+
+.game-odd-one-out .ooo-pip.is-done {
+  background: var(--ooo-right);
+  color: var(--paper-light);
+}
+
+.game-odd-one-out .ooo-pip.is-now {
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--ink);
+  color: var(--ink);
+}
+
+/* ---------- The map ---------- */
+/* The square takes whatever room is left between the chain's name and the button,
+   and map.js sizes itself to fit it. Like Coot the Wire's arena it runs out past
+   the page's gutters to the edges of the screen, because every pixel of width is
+   another block of city. */
+.game-odd-one-out .ooo-stage {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  margin-inline: calc(var(--gutter) * -1);
+}
+
+.game-odd-one-out .ooo-map {
+  position: relative;
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink);
+}
+
+.game-odd-one-out .ooo-canvas {
+  display: block;
+  image-rendering: pixelated;
+}
+
+/* ---------- Street names ---------- */
+.game-odd-one-out .ooo-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.game-odd-one-out .ooo-label {
+  position: absolute;
+  color: #6b5b46;
+  font-family: var(--font-readable);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  /* A pale outline so a name stays readable wherever the streets run under it. */
+  text-shadow:
+    1px 0 0 var(--ooo-land), -1px 0 0 var(--ooo-land),
+    0 1px 0 var(--ooo-land), 0 -1px 0 var(--ooo-land);
+}
+
+/* ---------- Pins ---------- */
+/* The tip of the pin is the address, so the art hangs above the point it marks.
+   --reach is how far around it counts as a tap, set per pin by game.js: pins
+   crowded together get smaller ones so they don't swallow each other. --depth is
+   how far down the map it sits, so that where two pins overlap the nearer one is
+   in front; a pin still in play, picked, or found comes forward of that. */
+.game-odd-one-out .ooo-pin {
+  position: absolute;
+  display: grid;
+  padding: 0;
+  border: 0;
+  background: none;
+  transform: translate(-50%, -100%);
+  z-index: calc(var(--depth, 0) + 200);
+  cursor: pointer;
+}
+
+.game-odd-one-out .ooo-pin img {
+  width: 22px; /* 11 pixels at 2× */
+}
+
+.game-odd-one-out .ooo-pin::after {
+  position: absolute;
+  bottom: calc(var(--reach, 16px) * -1);
+  left: 50%;
+  width: calc(var(--reach, 16px) * 2);
+  height: calc(var(--reach, 16px) * 2);
+  transform: translateX(-50%);
+  content: "";
+}
+
+.game-odd-one-out .ooo-pin.is-picked {
+  z-index: calc(var(--depth, 0) + 400);
+  animation: ooo-picked 320ms ease-out;
+}
+
+.game-odd-one-out .ooo-pin.is-picked img {
+  width: 26px; /* the one you're about to guess stands a little taller */
+}
+
+.game-odd-one-out .ooo-pin.is-gone {
+  z-index: var(--depth, 0);
+  cursor: default;
+  opacity: 0.75;
+}
+
+.game-odd-one-out .ooo-pin.is-found {
+  z-index: calc(var(--depth, 0) + 600);
+  animation: ooo-found 420ms steps(4);
+}
+
+@keyframes ooo-picked {
+  0% { transform: translate(-50%, -100%); }
+  50% { transform: translate(-50%, -120%); }
+  100% { transform: translate(-50%, -100%); }
+}
+
+@keyframes ooo-found {
+  0% { transform: translate(-50%, -100%) scale(1); }
+  50% { transform: translate(-50%, -100%) scale(1.5); }
+  100% { transform: translate(-50%, -100%) scale(1); }
+}
+
+/* ---------- Status line and the button ---------- */
+.game-odd-one-out .ooo-status {
+  min-height: 1.25rem;
+  margin: 0;
+  color: var(--ink-soft);
+  font-family: var(--font-readable);
+  font-size: 0.9375rem;
+  text-align: center;
+}
+
+.game-odd-one-out .ooo-status.is-wrong {
+  color: #c4503f;
+  animation: ooo-shake 320ms ease-in-out;
+}
+
+@keyframes ooo-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+.game-odd-one-out .ooo-go {
+  width: 100%;
+  font-size: 1.25rem;
+}
+
+.game-odd-one-out .ooo-go:disabled {
+  background: var(--paper-dark);
+  color: var(--ink-soft);
+  cursor: default;
+}
+
+.game-odd-one-out .ooo-credit {
+  margin: 0;
+  color: var(--ink-soft);
+  font-family: var(--font-readable);
+  font-size: 0.6875rem;
+  text-align: center;
+}
+
+/* ---------- Score ---------- */
+.game-odd-one-out .ooo-score {
+  width: 100%;
+  margin: auto;
+  padding: 28px 20px;
+  text-align: center;
+}
+
+.game-odd-one-out .ooo-score__number {
+  margin: 0;
+  color: var(--accent);
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.game-odd-one-out .ooo-score__unit {
+  margin: 0 0 16px;
+  font-size: 1.25rem;
+}
+
+.game-odd-one-out .ooo-score__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.game-odd-one-out .ooo-score__row {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+}
+
+.game-odd-one-out .ooo-square {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--ink);
+}
+
+.game-odd-one-out .ooo-square.is-found { background: var(--ooo-right); }
+.game-odd-one-out .ooo-square.is-gone { background: var(--ooo-wrong); }
+
+.game-odd-one-out .ooo-score__note,
+.game-odd-one-out .ooo-score__next {
+  margin: 16px 0 0;
+  color: var(--ink-soft);
+  font-family: var(--font-readable);
+  font-size: 0.875rem;
+}
+
+/* A button is shrink-to-fit whatever you set display to, so the card's own
+   text-align doesn't reach it -- it gets centred by its margins. */
+.game-odd-one-out .ooo-score .pixel-btn {
+  margin: 20px auto 0;
+}

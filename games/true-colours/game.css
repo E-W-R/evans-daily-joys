@@ -1,0 +1,310 @@
+/* True Colours. Everything is scoped to .game-true-colours, which play.html puts on
+   the game area and on the how-to-play box. */
+
+.game-true-colours {
+  --tc-right: #7fa34a; /* the real palette, once it's shown */
+  --tc-wrong: #d9534f; /* a made-up palette you guessed */
+}
+
+.game-true-colours .tc,
+.game-true-colours .tc-play {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.game-true-colours .tc-play { gap: 12px; }
+
+.game-true-colours .tc-note {
+  margin: auto;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.game-true-colours .tc-credit {
+  color: var(--ink-soft);
+  font-family: var(--font-readable);
+  font-size: 0.8125rem;
+}
+
+/* ---------- Which round ---------- */
+.game-true-colours .tc-pips {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.game-true-colours .tc-pip {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--ink);
+  background: var(--paper-dark);
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+  line-height: 18px;
+  text-align: center;
+}
+
+.game-true-colours .tc-pip.is-right,
+.game-true-colours .tc-pip.is-wrong { color: var(--paper-light); }
+.game-true-colours .tc-pip.is-right { background: var(--tc-right); }
+.game-true-colours .tc-pip.is-wrong { background: var(--tc-wrong); }
+
+.game-true-colours .tc-pip.is-now {
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--ink);
+  color: var(--ink);
+}
+
+.game-true-colours .tc-pip.is-now:is(.is-right, .is-wrong) { color: var(--paper-light); }
+
+/* ---------- The three palettes ---------- */
+/* They share out whatever height the page has left, up to a limit, so a short phone
+   gets flatter bars and a tall one doesn't get towers. The gaps leave room for the
+   ring around a picked palette and the badge on its corner. */
+.game-true-colours .tc-stage {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: calc(var(--px) * 7);
+  min-height: 0;
+  padding-block: calc(var(--px) * 3);
+}
+
+.game-true-colours .tc-slot {
+  display: flex;
+  flex: 1 1 0;
+  min-height: 56px;
+  max-height: 160px;
+  animation: tc-deal 240ms steps(3) backwards;
+  animation-delay: calc(var(--order, 0) * 80ms);
+}
+
+/* A palette is the site's pixel frame with the swatches edge to edge inside it.
+   --ring draws a second frame around that one: the colour of the pick, or of the
+   answer once it's in. The four corner shadows fill the frame's notches, so the
+   ring steps round the corner like the frame does. */
+.game-true-colours .tc-palette {
+  --ring: transparent;
+  position: relative;
+  display: flex;
+  flex: 1;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: var(--paper-light);
+  color: inherit;
+  opacity: 1;
+  container-type: inline-size;
+  cursor: pointer;
+  touch-action: manipulation;
+  box-shadow:
+    0 calc(-1 * var(--px)) 0 var(--ink),
+    calc(-1 * var(--px)) 0 0 var(--ink),
+    var(--px) 0 0 var(--ink),
+    0 var(--px) 0 var(--ink),
+    0 calc(-2 * var(--px)) 0 var(--ring),
+    calc(-2 * var(--px)) 0 0 var(--ring),
+    calc(2 * var(--px)) 0 0 var(--ring),
+    0 calc(2 * var(--px)) 0 var(--ring),
+    calc(-1 * var(--px)) calc(-1 * var(--px)) 0 var(--ring),
+    var(--px) calc(-1 * var(--px)) 0 var(--ring),
+    calc(-1 * var(--px)) var(--px) 0 var(--ring),
+    var(--px) var(--px) 0 var(--ring);
+}
+
+.game-true-colours .tc-palette:disabled { cursor: default; }
+
+.game-true-colours .tc-palette.is-picked {
+  --ring: var(--highlight);
+  animation: tc-hop 200ms steps(2);
+}
+
+.game-true-colours .tc-palette.is-real { --ring: var(--tc-right); }
+.game-true-colours .tc-palette.is-wrong { --ring: var(--tc-wrong); }
+
+.game-true-colours .tc-swatch {
+  display: flex;
+  flex: 1 1 0;
+  align-items: flex-end;
+  min-width: 0;
+  padding: 6px;
+  text-align: left;
+}
+
+/* A colour's name sits in its swatch like the label on a paint chip, in ink or
+   paper, whichever reads better on that colour (game.js picks). The longest word
+   in any name ("Pomegranite") is about 6 times as wide as the text is tall, so a
+   narrow swatch -- four colours on a small phone -- shrinks the text to keep every
+   word whole. --count is how many swatches the palette has. */
+.game-true-colours .tc-name {
+  font-family: var(--font-readable);
+  font-size: 0.75rem;
+  font-size: min(0.75rem, (100cqw / var(--count, 4) - 12px) / 6);
+  font-weight: 700;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  animation: tc-deal 240ms steps(3) backwards;
+}
+
+.game-true-colours .is-on-light .tc-name { color: var(--ink); }
+.game-true-colours .is-on-dark .tc-name { color: var(--paper-light); }
+
+.game-true-colours .tc-badge {
+  position: absolute;
+  top: calc(-2 * var(--px));
+  right: calc(-2 * var(--px));
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  background: var(--tc-right);
+  animation: tc-pop 300ms steps(3);
+  box-shadow:
+    0 calc(-1 * var(--px)) 0 var(--ink),
+    calc(-1 * var(--px)) 0 0 var(--ink),
+    var(--px) 0 0 var(--ink),
+    0 var(--px) 0 var(--ink);
+}
+
+.game-true-colours .is-wrong .tc-badge { background: var(--tc-wrong); }
+.game-true-colours .tc-badge img { width: 21px; } /* 7 pixels at 3× */
+
+@keyframes tc-deal {
+  from {
+    opacity: 0;
+    transform: translateY(calc(3 * var(--px)));
+  }
+}
+
+@keyframes tc-hop {
+  50% { transform: translateY(calc(-1 * var(--px))); }
+}
+
+@keyframes tc-pop {
+  0% { transform: scale(0); }
+  66% { transform: scale(1.25); }
+}
+
+/* ---------- Status line and the button ---------- */
+.game-true-colours .tc-status {
+  min-height: 1.25rem;
+  margin: 0;
+  color: var(--ink-soft);
+  font-family: var(--font-readable);
+  font-size: 0.9375rem;
+  text-align: center;
+}
+
+.game-true-colours .tc-status.is-wrong {
+  color: #c4503f;
+  animation: tc-shake 320ms ease-in-out;
+}
+
+@keyframes tc-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+.game-true-colours .tc-go {
+  width: 100%;
+  font-size: 1.25rem;
+}
+
+.game-true-colours .tc-go:disabled {
+  background: var(--paper-dark);
+  color: var(--ink-soft);
+  cursor: default;
+}
+
+/* ---------- Score ---------- */
+.game-true-colours .tc-score {
+  width: 100%;
+  max-height: 100%;
+  margin: auto;
+  padding: 24px 20px;
+  overflow-y: auto;
+  text-align: center;
+}
+
+.game-true-colours .tc-score__number {
+  color: var(--accent);
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.game-true-colours .tc-score__number span {
+  color: var(--ink-soft);
+  font-size: 2rem;
+}
+
+.game-true-colours .tc-score__unit {
+  margin: 4px 0 16px;
+  font-size: 1.125rem;
+}
+
+/* The week's seven real palettes, each with a square for how you did. */
+.game-true-colours .tc-score__rows {
+  display: grid;
+  gap: 6px;
+  width: min(100%, 240px);
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.game-true-colours .tc-review {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 2px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.game-true-colours .tc-mark {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--ink);
+}
+
+.game-true-colours .tc-mark.is-right { background: var(--tc-right); }
+.game-true-colours .tc-mark.is-wrong { background: var(--tc-wrong); }
+
+.game-true-colours .tc-mini {
+  display: flex;
+  flex: 1;
+  height: 20px;
+  border: 2px solid var(--ink);
+}
+
+.game-true-colours .tc-mini span { flex: 1 1 0; }
+
+.game-true-colours .tc-score__hint,
+.game-true-colours .tc-score__note,
+.game-true-colours .tc-score__next {
+  margin-top: 12px;
+  color: var(--ink-soft);
+  font-family: var(--font-readable);
+  font-size: 0.875rem;
+}
+
+.game-true-colours .tc-score__hint { font-size: 0.8125rem; }
+
+/* A button is shrink-to-fit whatever you set display to, so the card's own
+   text-align doesn't reach it -- it gets centred by its margins. */
+.game-true-colours .tc-score .pixel-btn {
+  margin: 20px auto 0;
+}

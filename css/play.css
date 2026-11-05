@@ -1,0 +1,54 @@
+/* Game page: top bar plus the area each game draws into. */
+
+/* The page is exactly one screen tall, so a game can keep things (like a keyboard)
+   pinned to the bottom. A game taller than the screen should scroll part of itself. */
+.play {
+  gap: 16px;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ---------- Top bar: back arrow, game name, date ---------- */
+.topbar {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px; /* back | name | help (or nothing), name centered */
+  align-items: center;
+  margin-inline: -8px;
+}
+
+.topbar__text { text-align: center; }
+
+.topbar__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.topbar__meta {
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+}
+
+/* ---------- Game area ---------- */
+.game-root {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ---------- Message card (coming soon, not yet, errors) ---------- */
+.message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-block: auto;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.message__icon { width: 64px; } /* 16×16 pixels at 4× */
+.message__heading { font-size: 2rem; }
+.message__text { color: var(--ink-soft); }
+.message .pixel-btn { margin-top: 12px; }

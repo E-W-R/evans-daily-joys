@@ -1,0 +1,480 @@
+/* Date Guessr. Every rule is scoped under .game-date-guessr, the class on the game
+   area, on its how-to-play dialog, and on the day and map pop-ups. */
+
+.game-date-guessr {
+  --near: #7fa34a; /* the true spot's pin, and a good guess */
+  --far: #d9534f;
+  --thumb: 56px; /* the little square photo on the result and score cards */
+}
+
+.game-date-guessr .dg {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.game-date-guessr .dg-note {
+  margin: auto 0;
+  padding: 0 8px;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+/* Photos, unlike everything else here, are not pixel art: base.css sharpens every
+   image into blocks, and these need to stay photographs. */
+.game-date-guessr .dg-frame img,
+.game-date-guessr .dg-result__thumb img,
+.game-date-guessr .dg-look__thumb img,
+.game-date-guessr .leaflet-container img {
+  image-rendering: auto;
+}
+
+/* ---------- The lock screen ---------- */
+.game-date-guessr .dg-lock {
+  display: grid;
+  gap: 12px;
+  margin-block: auto;
+  padding: 24px 20px 28px;
+  text-align: center;
+}
+
+.game-date-guessr .dg-lock__title { font-size: 2rem; }
+.game-date-guessr .dg-lock__text { color: var(--ink-soft); line-height: 1.4; }
+
+.game-date-guessr .dg-lock__input {
+  height: 52px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-readable);
+  font-size: 1.125rem; /* 16px or more stops iPhones zooming in on the box */
+  text-align: center;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow:
+    0 -3px 0 var(--ink), -3px 0 0 var(--ink), 3px 0 0 var(--ink), 0 3px 0 var(--ink);
+}
+
+.game-date-guessr .dg-lock__input:focus {
+  outline: none;
+  box-shadow:
+    0 -3px 0 var(--accent), -3px 0 0 var(--accent),
+    3px 0 0 var(--accent), 0 3px 0 var(--accent);
+}
+
+.game-date-guessr .dg-lock__hint {
+  color: var(--ink-soft);
+  font-family: var(--font-readable);
+  font-size: 0.8125rem;
+}
+
+/* Wrong phrase: the same jerky shake a wrong answer gets elsewhere. */
+.game-date-guessr .is-wrong { animation: dg-shake 0.45s steps(1); }
+
+@keyframes dg-shake {
+  0%, 100% { transform: none; }
+  12% { transform: translateX(-6px); }
+  25% { transform: translateX(6px); }
+  37% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  62% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+/* ---------- Guessing ---------- */
+.game-date-guessr .dg-play {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+.game-date-guessr .dg-which {
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* The photo takes whatever room is left and stays square, so the pickers and the
+   Submit button never leave the screen. */
+.game-date-guessr .dg-shot {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: var(--px);
+}
+
+.game-date-guessr .dg-frame {
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--paper-dark);
+}
+
+.game-date-guessr .dg-frame img,
+.game-date-guessr .dg-result__thumb img,
+.game-date-guessr .dg-look__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* While a photo is still coming down and being opened. */
+.game-date-guessr .is-waiting { animation: dg-waiting 1.2s steps(2) infinite; }
+
+@keyframes dg-waiting {
+  from { background: var(--paper-dark); }
+  to { background: var(--paper-light); }
+}
+
+/* ---------- The two pickers ---------- */
+.game-date-guessr .dg-picks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  flex: none;
+}
+
+.game-date-guessr .dg-pick {
+  display: grid;
+  gap: 2px;
+  min-height: 58px;
+  padding: 8px 6px;
+  border: 0;
+  background: var(--paper-light);
+  text-align: center;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.game-date-guessr .dg-pick:active { transform: translateY(2px); }
+
+.game-date-guessr .dg-pick__label {
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.game-date-guessr .dg-pick__value {
+  color: var(--ink-soft);
+  font-family: var(--font-readable);
+  font-size: 0.9375rem;
+}
+
+.game-date-guessr .dg-pick.is-set .dg-pick__value {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.game-date-guessr .dg-submit { flex: none; width: 100%; }
+
+/* ---------- Result and score cards ---------- */
+.game-date-guessr .dg-after {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.game-date-guessr .dg-result,
+.game-date-guessr .dg-score {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  padding: 16px 16px 20px;
+}
+
+.game-date-guessr .dg-result { flex: 1; } /* it holds a map, so it fills the screen */
+
+.game-date-guessr .dg-result__top {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 14px;
+}
+
+.game-date-guessr .dg-result__thumb,
+.game-date-guessr .dg-look__thumb {
+  display: block;
+  flex: none;
+  width: var(--thumb);
+  height: var(--thumb);
+  overflow: hidden;
+  background: var(--paper-dark);
+}
+
+.game-date-guessr .dg-result__points { font-size: 2.5rem; line-height: 1; }
+.game-date-guessr .dg-result__points span { color: var(--ink-soft); font-size: 1.25rem; }
+
+.game-date-guessr .dg-result__rows {
+  display: grid;
+  flex: none;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.game-date-guessr .dg-result__rows li {
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  gap: 0 10px;
+  align-items: baseline;
+}
+
+.game-date-guessr .dg-row__label {
+  grid-area: 1 / 1 / span 2 / 2;
+  align-self: center;
+  color: var(--ink-soft);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.game-date-guessr .dg-row__main {
+  grid-area: 1 / 2 / 2 / 3;
+  font-family: var(--font-readable);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.game-date-guessr .dg-row__points {
+  grid-area: 1 / 3 / span 2 / 4;
+  align-self: center;
+  font-size: 1.5rem;
+}
+
+.game-date-guessr .dg-row__sub {
+  grid-area: 2 / 2 / 3 / 3;
+  color: var(--ink-soft);
+  font-family: var(--font-readable);
+  font-size: 0.8125rem;
+  line-height: 1.35;
+}
+
+/* ---------- The score card ---------- */
+/* No map on this one, so it sits in the middle at whatever height it needs. */
+.game-date-guessr .dg-score {
+  flex: 0 1 auto;
+  margin-block: auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  text-align: center;
+}
+
+.game-date-guessr .dg-score__number { flex: none; font-size: 3rem; line-height: 1; }
+.game-date-guessr .dg-score__number span { color: var(--ink-soft); font-size: 1.5rem; }
+
+.game-date-guessr .dg-score__unit {
+  flex: none;
+  margin-top: -8px;
+  color: var(--ink-soft);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.game-date-guessr .dg-score__rows {
+  display: grid;
+  flex: none;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.game-date-guessr .dg-look {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.game-date-guessr .dg-look__detail {
+  display: grid;
+  gap: 2px;
+}
+
+.game-date-guessr .dg-look__detail b { font-size: 1.5rem; line-height: 1; }
+
+.game-date-guessr .dg-look__detail span {
+  color: var(--ink-soft);
+  font-family: var(--font-readable);
+  font-size: 0.8125rem;
+}
+
+.game-date-guessr .dg-score__hint,
+.game-date-guessr .dg-score__note,
+.game-date-guessr .dg-score__next {
+  flex: none;
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+}
+
+.game-date-guessr .dg-score .pixel-btn {
+  flex: none;
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* ---------- Pop-ups: the calendar and the map ---------- */
+/* Wider and taller than the how-to-play dialog, because a map needs the room.
+   A dialog is centred by default, so a month with six rows of days would sit higher
+   than one with four and the arrows would move every time you stepped a month. The
+   top is pinned instead, and the bottom moves. */
+.game-date-guessr.dg-sheet {
+  width: min(94vw, 460px);
+  max-height: 85dvh;
+  margin-block: 12dvh auto;
+}
+
+.game-date-guessr .dg-sheet__body { gap: 8px; }
+
+/* A month with six rows of days can be taller than the screen leaves room for, and
+   a desktop scrollbar would then take its width out of the calendar, so the grid
+   would shrink and shift whenever you stepped onto one. Holding the gutter open on
+   both sides keeps every month exactly the same width. Phones scroll over the top
+   of the content, so they lose nothing to this. */
+.game-date-guessr.dg-sheet .dialog__body { scrollbar-gutter: stable both-edges; }
+
+.game-date-guessr.dg-sheet .dialog__actions .pixel-btn {
+  font-size: 1.125rem;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.game-date-guessr .dg-sheet__hint {
+  color: var(--ink-soft);
+  font-family: var(--font-readable);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* ---------- The calendar in the day pop-up ---------- */
+.game-date-guessr .dg-cal { gap: 10px; }
+
+.game-date-guessr .dg-cal__top {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+}
+
+.game-date-guessr .dg-cal__title {
+  font-size: 1.375rem;
+  text-align: center;
+}
+
+.game-date-guessr .dg-cal__weekdays,
+.game-date-guessr .dg-cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.game-date-guessr .dg-cal__weekdays {
+  color: var(--ink-soft);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.game-date-guessr .dg-cal__grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.game-date-guessr .dg-day__btn {
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  background: var(--paper-dark);
+  font-family: var(--font-pixel);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.game-date-guessr .dg-day__btn.is-picked {
+  background: var(--highlight);
+  box-shadow:
+    0 -3px 0 var(--ink), -3px 0 0 var(--ink), 3px 0 0 var(--ink), 0 3px 0 var(--ink);
+}
+
+/* ---------- The maps ---------- */
+.game-date-guessr .dg-map {
+  background: var(--paper-dark);
+  box-shadow:
+    0 calc(-1 * var(--px)) 0 var(--ink), calc(-1 * var(--px)) 0 0 var(--ink),
+    var(--px) 0 0 var(--ink), 0 var(--px) 0 var(--ink);
+}
+
+.game-date-guessr .dg-map--pick {
+  height: min(56dvh, 420px);
+  margin-bottom: var(--px);
+}
+
+.game-date-guessr .dg-map--result {
+  flex: 1 1 auto;
+  min-height: 130px;
+  margin-inline: var(--px);
+}
+
+.game-date-guessr .dg-map.is-missing::after {
+  display: grid;
+  height: 100%;
+  padding: 16px;
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+  place-items: center;
+  text-align: center;
+  content: "The map didn't load, but your points are counted.";
+}
+
+/* The pin hangs above the spot it marks, like Odd One Out's. */
+.game-date-guessr .dg-pin img { width: 22px; } /* 11 pixels of art at 2× */
+
+/* Leaflet's own furniture, squared off to match the rest of the site. */
+.game-date-guessr .leaflet-container {
+  background: var(--paper-dark);
+  font-family: var(--font-readable);
+}
+
+.game-date-guessr .leaflet-bar,
+.game-date-guessr .leaflet-bar a {
+  border-radius: 0;
+  border-color: var(--ink);
+}
+
+.game-date-guessr .leaflet-bar a {
+  background: var(--paper-light);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.game-date-guessr .leaflet-control-attribution {
+  background: rgb(255 248 231 / 0.85);
+  font-size: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-date-guessr .is-wrong,
+  .game-date-guessr .is-waiting { animation: none; }
+}

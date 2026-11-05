@@ -1,0 +1,278 @@
+/* Redacted. Every rule is scoped under .game-redacted, the class on the game area and
+   on its how-to-play dialog. */
+
+.game-redacted {
+  --got-1: #7fa34a; /* got it on guess 1 (🟩 when sharing) */
+  --got-2: #f2c14e; /* guess 2 (🟨) */
+  --got-3: #ec8a3a; /* guess 3 (🟧) */
+  --got-4: #d9534f; /* guess 4 (🟥) */
+  --blank: var(--paper-dark);
+  --flash: #fbdcaa; /* newly uncovered words */
+}
+
+.game-redacted.game-root { gap: 14px; }
+
+/* ---------- Article progress: five numbered squares ---------- */
+.game-redacted .rd-progress {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin: 0;
+  padding: 4px 0 2px;
+  list-style: none;
+}
+
+.game-redacted .rd-step {
+  --edge: 0 -3px 0 var(--ink), -3px 0 0 var(--ink), 3px 0 0 var(--ink), 0 3px 0 var(--ink);
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  background: var(--paper-dark);
+  color: var(--ink-soft);
+  font-family: var(--font-pixel);
+  font-size: 1.125rem;
+  font-weight: 700;
+  box-shadow: var(--edge);
+}
+
+.game-redacted .rd-step:enabled { cursor: pointer; touch-action: manipulation; }
+
+/* The article on screen sits raised, like an unpressed button. */
+.game-redacted .rd-step.is-current {
+  transform: translateY(-3px);
+  box-shadow: var(--edge), 0 6px 0 var(--ink);
+}
+
+.game-redacted .rd-step--upcoming.is-current {
+  background: var(--paper-light);
+  color: var(--ink);
+}
+
+.game-redacted .rd-step--got-1 { background: var(--got-1); color: var(--paper-light); }
+.game-redacted .rd-step--got-2 { background: var(--got-2); color: var(--ink); }
+.game-redacted .rd-step--got-3 { background: var(--got-3); color: var(--ink); }
+.game-redacted .rd-step--got-4 { background: var(--got-4); color: var(--paper-light); }
+.game-redacted .rd-step--missed { background: var(--ink-soft); color: var(--paper-light); }
+
+/* ---------- Article text ---------- */
+/* Fills the space between the squares and the guess box, and scrolls inside. */
+.game-redacted .rd-article {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 14px 16px;
+  font-family: var(--font-readable);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.game-redacted .rd-article:focus-visible { outline-offset: 6px; }
+.game-redacted .rd-article p { margin: 0 0 0.9em; }
+.game-redacted .rd-article p:last-child { margin-bottom: 0; }
+
+/* A hidden word keeps its exact width: the text is there, just invisible (and skipped
+   by find-in-page and screen readers), with a block drawn behind it. */
+.game-redacted .rd-word.is-hidden { background: var(--blank); }
+.game-redacted .rd-word.is-hidden > span { visibility: hidden; }
+.game-redacted .rd-word.is-new { animation: rd-flash 1.6s steps(4) both; }
+
+@keyframes rd-flash {
+  from { background: var(--flash); }
+  to { background: transparent; }
+}
+
+.game-redacted .rd-tag {
+  color: var(--ink-soft);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.game-redacted .rd-tag--title { color: var(--accent); }
+
+/* ---------- Guessing ---------- */
+.game-redacted .rd-bottom {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  gap: 10px;
+}
+
+.game-redacted .rd-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+}
+
+.game-redacted .rd-pips { display: flex; gap: 6px; }
+
+.game-redacted .rd-pip {
+  width: 12px;
+  height: 12px;
+  background: var(--paper-light);
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+
+.game-redacted .rd-pip.is-used { background: var(--ink); }
+
+.game-redacted .rd-status__text {
+  flex: 1;
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+}
+
+.game-redacted .rd-skip {
+  min-height: 36px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: underline 2px;
+  text-transform: uppercase;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.game-redacted .rd-tries {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.game-redacted .rd-try {
+  padding: 2px 8px;
+  background: var(--paper-dark);
+  color: var(--ink-soft);
+  font-family: var(--font-readable);
+  font-size: 0.875rem;
+  text-decoration: line-through 2px;
+}
+
+.game-redacted .rd-try--skip {
+  font-family: var(--font-pixel);
+  text-decoration: none;
+}
+
+.game-redacted .rd-form {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  padding-bottom: 4px; /* room for the button's base */
+}
+
+.game-redacted .rd-input {
+  flex: 1;
+  min-width: 0;
+  height: 52px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 0;
+  background: var(--paper-light);
+  color: var(--ink);
+  font-family: var(--font-readable);
+  font-size: 1.125rem; /* 16px or more stops iPhones zooming in on the box */
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: 0 -3px 0 var(--ink), -3px 0 0 var(--ink), 3px 0 0 var(--ink), 0 3px 0 var(--ink);
+}
+
+.game-redacted .rd-input::placeholder { color: var(--ink-soft); }
+
+.game-redacted .rd-input:focus {
+  outline: none;
+  box-shadow:
+    0 -3px 0 var(--accent), -3px 0 0 var(--accent), 3px 0 0 var(--accent), 0 3px 0 var(--accent);
+}
+
+.game-redacted .rd-go {
+  flex: none;
+  padding: 8px 16px;
+  font-size: 1.125rem;
+}
+
+/* Suggestions pop up above the box, since the phone keyboard is below it. */
+/* About 5½ rows show at once; the cut-off one hints that the list scrolls. game.js lowers
+   the height further when the phone keyboard leaves less room. */
+.game-redacted .rd-suggest {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 12px);
+  left: 0;
+  z-index: 5;
+  max-height: min(232px, var(--room, 232px));
+  margin: 0;
+  padding: 4px 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  font-family: var(--font-readable);
+}
+
+.game-redacted .rd-suggest li {
+  padding: 10px 14px;
+  line-height: 1.25;
+  cursor: pointer;
+}
+
+.game-redacted .rd-suggest li + li { border-top: 2px dashed var(--paper-dark); }
+.game-redacted .rd-suggest li.is-active { background: var(--flash); }
+
+@media (hover: hover) {
+  .game-redacted .rd-suggest li:hover { background: var(--flash); }
+}
+
+/* Wrong guess: a quick, jerky shake. */
+.game-redacted .is-wrong { animation: rd-shake 0.45s steps(1); }
+
+@keyframes rd-shake {
+  0%, 100% { transform: none; }
+  12% { transform: translateX(-6px); }
+  25% { transform: translateX(6px); }
+  37% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  62% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-redacted .is-wrong,
+  .game-redacted .rd-word.is-new { animation: none; }
+}
+
+/* ---------- Results ---------- */
+.game-redacted .rd-result {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 16px 16px 20px;
+  text-align: center;
+}
+
+.game-redacted .rd-result__title {
+  font-family: var(--font-readable);
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.game-redacted .rd-result__score { font-size: 2rem; line-height: 1; }
+
+.game-redacted .rd-result__link,
+.game-redacted .rd-result__viewing,
+.game-redacted .rd-result__next {
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+}
+
+.game-redacted .rd-result .pixel-btn {
+  width: 100%;
+  margin-top: 6px;
+}
