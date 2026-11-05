@@ -322,8 +322,8 @@
 .game-minute-cryptevan.game-root.is-done {
   overflow-y: auto;
   overscroll-behavior: contain;
-  margin-inline: -6px;
-  padding: 0 6px 6px;
+  margin: -6px -6px 0;
+  padding: 6px;
 }
 
 .game-minute-cryptevan.is-done .mc-top {
